@@ -1,0 +1,23 @@
+
+import modules ;
+
+local boost-inc = [ modules.peek user-config : boost-include ] ;
+
+project SParGe :
+	source-location src	
+	: requirements
+	<include>$(boost-inc)
+	<include>./include
+	<toolset>gcc:<cxxflags>-std=gnu++1y
+	<linkflags>-LF:/boost/lib
+	<linkflags>-lboost_program_options-mgw-mt-1_59
+	;
+	
+exe sparge : main.cpp 
+			[ glob gold/*.cpp ]
+			[ glob gold/reader/*.cpp ] 
+
+ 		;
+		
+		
+install bin : sparge ;
