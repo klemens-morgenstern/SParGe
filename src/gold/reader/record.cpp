@@ -31,7 +31,7 @@ boost::optional<record> record::read_record(std::istream& str)
 	else return boost::none;
 }
 
-std::wostream &operator<<(std::wostream& str, const record &e)
+std::ostream &operator<<(std::ostream& str, const record &e)
 {
 	str << "Record" << endl;
 	for (auto &x : e.entries)

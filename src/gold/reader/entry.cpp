@@ -1,6 +1,9 @@
 
 #include <sparge/gold/reader/entry.hpp>
 #include <sstream>
+#include <locale>
+#include <boost/locale/encoding.hpp>
+
 using namespace std;
 
 namespace sparge
@@ -8,37 +11,41 @@ namespace sparge
 namespace gold
 {
 
-struct visi : boost::static_visitor<wstring>
+struct visi : boost::static_visitor<std::string>
 {
-	wstring operator()(boost::none_t) {return L"blank";}
-	wstring operator()(char val)
+	std::string operator()(boost::none_t) {return "blank";}
+	std::string operator()(char val)
 	{
-		wostringstream ws;
-		ws << L"byte: " << val;
+		ostringstream ws;
+		ws << "byte: " << val;
 		return ws.str();
 	}
-	wstring operator()(bool val)
+	std::string operator()(bool val)
 	{
-		wostringstream ws;
-		ws << L"bool: " << val;
-		return ws.str();
-
-	}
-	wstring operator()(uint16_t val)
-	{
-		wostringstream ws;
-		ws << L"int: " << val;
+		ostringstream ws;
+		ws << "bool: " << val;
 		return ws.str();
 
 	}
-	wstring operator()(wstring  val) {return L"string: " + val + L"\n"; }
+	std::string operator()(uint16_t val)
+	{
+		ostringstream ws;
+		ws << "int: " << val;
+		return ws.str();
+
+	}
+	std::string operator()(std::u16string  val)
+	{
+		std::string st = boost::locale::conv::from_utf(val, std::locale().name());
+		return "string: " + st + "\n";
+	}
 };
 
 
-wostream &operator<<(wostream& str, const entry &e)
+ostream &operator<<(ostream& str, const entry &e)
 {
 	visi v;
-	str << L"\t" <<  e.data.apply_visitor(v) << endl;
+	str << "\t" <<  e.data.apply_visitor(v) << endl;
 
 
 	return str;

@@ -1,6 +1,8 @@
 #include <sparge/gold/property.hpp>
 #include <sparge/gold/reader/record.hpp>
 #include <sparge/gold/reader/get_vis.hpp>
+#include <locale>
+#include <boost/locale/encoding.hpp>
 
 namespace sparge
 {
@@ -17,9 +19,11 @@ property property::from_record(const record &r)
 	return p;
 }
 
-std::wostream& operator<<(std::wostream& s, const property& p)
+std::ostream& operator<<(std::ostream& s, const property& p)
 {
-	s << "idx: " << p.index << " " << p.name << ":" << p.value;
+	s << "idx: " << p.index << " " <<
+			boost::locale::conv::from_utf(p.name, std::locale().name()) << ":" <<
+			boost::locale::conv::from_utf(p.value, std::locale().name());
 	return s;
 }
 

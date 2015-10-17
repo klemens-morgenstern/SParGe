@@ -30,7 +30,7 @@ struct initial_states
 
 };
 
-std::wostream& operator<<(std::wostream& s, const initial_states& f);
+std::ostream& operator<<(std::ostream& s, const initial_states& f);
 
 }
 }

@@ -11,6 +11,8 @@ project SParGe :
 	<toolset>gcc:<cxxflags>-std=gnu++1y
 	<linkflags>-LF:/boost/lib
 	<linkflags>-lboost_program_options-mgw-mt-1_59
+	<linkflags>-lboost_locale-mgw-mt-1_59
+	<link>shared
 	;
 	
 exe sparge : main.cpp 

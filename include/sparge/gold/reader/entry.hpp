@@ -42,7 +42,7 @@ public:
 
 
 
-std::wostream &operator<<(std::wostream& str, const entry &e);
+std::ostream &operator<<(std::ostream& str, const entry &e);
 
 }
 }

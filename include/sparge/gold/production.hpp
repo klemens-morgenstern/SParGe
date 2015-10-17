@@ -27,6 +27,9 @@ struct production
 
 };
 
+std::ostream & operator<<(std::ostream & ostr, const production &p);
+
+
 }
 }
 

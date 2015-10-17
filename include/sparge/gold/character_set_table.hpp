@@ -41,7 +41,7 @@ struct character_set_table
 
 };
 
-std::wostream& operator<<(std::wostream& s, const character_set_table& f);
+std::ostream& operator<<(std::ostream& s, const character_set_table& f);
 
 
 }

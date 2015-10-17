@@ -24,7 +24,7 @@ struct record
 
 };
 
-std::wostream &operator<<(std::wostream& str, const record &e);
+std::ostream &operator<<(std::ostream& str, const record &e);
 
 
 }}

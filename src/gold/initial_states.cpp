@@ -19,11 +19,10 @@ initial_states initial_states::from_record(const record &r)
 	return p;
 }
 
-std::wostream& operator<<(std::wostream& s, const initial_states& p)
+std::ostream& operator<<(std::ostream& s, const initial_states& p)
 {
-	s << "==================== Production ====================" << endl;
-	s << "\tDFA : " << p.dfa << endl;
-	s << "\tLALR: " << p.lalr << endl;
+	s << " - dfa  : " << p.dfa  << "\n";
+	s << " - lalr : " << p.lalr << "\n";
 	return s;
 }
 

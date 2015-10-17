@@ -28,6 +28,33 @@ indexed<lalr_state> lalr_state::from_record(const record &r)
 	return {idx, p};
 }
 
+std::ostream & operator<<(std::ostream & ostr, const lalr_state &f)
+{
+	auto es = [](lalr_state::action_type_t t)
+		{
+			using e = lalr_state::action_type_t;
+
+			switch (t)
+			{
+				case e::Shift:  return "Shift ";
+				case e::Reduce: return "Reduce";
+				case e::Goto: 	return "Goto";
+				case e::Accept: return "Accept";
+				default: return "";
+			}
+		};
+
+	ostr << "| Symbol Index | Action | Target Index |\n"
+			"|--------------|--------|--------------|\n";
+
+	for (auto & a: f.actions)
+		ostr << "| " << a.symbol_index << " | " << es(a.action)
+			 << " | " << a.target_index << " |\n";
+
+
+	return ostr;
+}
+
 
 }
 

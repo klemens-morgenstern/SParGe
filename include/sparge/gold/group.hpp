@@ -45,6 +45,10 @@ struct group_record
 	static indexed<group_record> from_record(const record &r);
 };
 
+
+std::ostream & operator<<(std::ostream & ostr, const group_record &f);
+
+
 }
 }
 

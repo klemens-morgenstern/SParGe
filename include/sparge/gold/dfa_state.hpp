@@ -37,6 +37,7 @@ struct dfa_state
 
 };
 
+std::ostream & operator<<(std::ostream & ostr, const dfa_state &f);
 
 }
 }

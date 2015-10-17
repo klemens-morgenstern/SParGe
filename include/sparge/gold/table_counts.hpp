@@ -35,7 +35,7 @@ struct table_counts
 
 };
 
-std::wostream &operator<<(std::wostream& str, const table_counts &e);
+std::ostream &operator<<(std::ostream& str, const table_counts &e);
 
 
 }}

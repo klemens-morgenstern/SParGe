@@ -55,6 +55,7 @@ struct file
 file read_raw_file(const std::string & rf);
 file read_raw_file(const raw_file & rf);
 
+std::ostream & operator<<(std::ostream & ostr, const file &f);
 
 }}
 

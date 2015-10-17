@@ -47,7 +47,7 @@ struct property
 
 };
 
-std::wostream& operator<<(std::wostream& s, const property& f);
+std::ostream& operator<<(std::ostream& s, const property& f);
 
 }
 }

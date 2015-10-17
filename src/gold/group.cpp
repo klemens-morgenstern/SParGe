@@ -1,6 +1,7 @@
 
 #include <sparge/gold/reader/record.hpp>
 #include <sparge/gold/group.hpp>
+#include <boost/locale/encoding.hpp>
 
 #include <iostream>
 
@@ -40,6 +41,32 @@ indexed<group_record> group_record::from_record(const record &r)
 		gc.group_index.push_back(r.entries.at(10+i).get<integer>());
 
 	return {idx, gc};
+}
+
+std::ostream & operator<<(std::ostream & ostr, const group_record &g)
+{
+	ostr << boost::locale::conv::from_utf(g.name, "utf-8") << "\n\n";
+
+	ostr << "| Name | Index |\n"
+			"|------|-------|\n";
+
+	ostr << "| Container | " << g.container_index 	<< " |\n";
+	ostr << "| Start     | " << g.start_index 		<< " |\n";
+	ostr << "| End       | " << g.end_index 		<< " |\n";
+	ostr << "| Group     | " ;
+
+	for (auto & i : g.group_index)
+		ostr << i << ", ";
+
+	ostr << "|\n\n";
+
+	using e1 = group_record::advance_mode_t;
+	using e2 = group_record::ending_mode_t;
+	ostr << " - Advances by " << (g.advance_mode == e1::Token ? "Token" : "Character") 	<< "\n";
+	ostr << " - End-mode is " << (g.ending_mode  == e2::Open  ? "Open"  : "Closed") 	<< "\n";
+
+	ostr << "\n";
+	return ostr;
 }
 
 }

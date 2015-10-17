@@ -17,7 +17,7 @@ namespace gold
 using integer 	= std::uint16_t;
 template<typename T>
 using range		= std::vector<T>;
-using string  	= std::wstring;
+using string  	= std::u16string;
 using byte		= char;
 using boolean	= bool;
 using blank 	= boost::blank;

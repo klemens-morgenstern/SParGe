@@ -42,6 +42,7 @@ struct lalr_state
 	static indexed<lalr_state> from_record(const record &r);
 
 };
+std::ostream & operator<<(std::ostream & ostr, const lalr_state &f);
 
 
 

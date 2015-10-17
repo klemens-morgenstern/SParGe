@@ -29,7 +29,22 @@ indexed<dfa_state> dfa_state::from_record(const record &r)
 	return {idx, p};
 }
 
+std::ostream & operator<<(std::ostream & ostr, const dfa_state &f)
+{
+	ostr << " - Accept: " << f.accept_state ? "true \n" : "false\n";
+	ostr << " - Accept Index: " << f.accept_index << "\n";
 
+
+
+	ostr << "| Char Set Index | Target Index |\n"
+			"|----------------|--------------|\n";
+
+	for (auto & e : f.edges)
+		ostr << "| " << e.char_set_index  << " | " << e.target_index << "|\n";
+
+	ostr << "\n";
+	return ostr;
+}
 
 }
 }

@@ -22,6 +22,20 @@ indexed<production> production::from_record(const record &r)
 	return {idx, cs};
 }
 
+std::ostream & operator<<(std::ostream & ostr, const production &p)
+{
+	ostr << " | " << p.head_index << " | ";
+
+	for (auto & i : p.symbols)
+		ostr << i << ", ";
+
+	ostr << " |\n";
+
+
+	return ostr;
+}
+
+
 }
 }
 

@@ -1,6 +1,7 @@
 
 #include <sparge/gold/table_counts.hpp>
 #include <sparge/gold/reader/record.hpp>
+#include <boost/format.hpp>
 
 using namespace std;
 
@@ -24,18 +25,26 @@ table_counts table_counts::from_record(const record &r)
 	return tc;
 }
 
-wostream &operator<<(wostream& str, const table_counts &e)
+ostream &operator<<(ostream& ostr, const table_counts &e)
 {
-	str << "==================== table counts ====================" << endl;
 
-	str << "\tsymboltable: " << e.symbol_table << endl;
-	str << "\tsettable   : " << e.set_table    << endl;
-	str << "\truletable  : " << e.rule_table   << endl;
-	str << "\tdfatable   : " << e.dfa_table    << endl;
-	str << "\tlalrtable  : " << e.lalr_table   << endl;
-	str << "\tgrouptable : " << e.group_table  << endl;
+	ostr << "| Table Name  | Count |\n"
+			"|-------------|-------|\n";
 
-	return str;
+	auto fr = boost::format("| %1% | %2% |\n");
+
+	ostr << fr % "Symbols" % e.symbol_table;
+
+
+	ostr << fr % "Symbols"     		 % e.symbol_table;
+	ostr << fr % "Character Sets "   % e.set_table   ;
+	ostr << fr % "Rules "  			 % e.rule_table  ;
+	ostr << fr % "Dfa States "   	 % e.dfa_table   ;
+	ostr << fr % "Lalr States "  	 % e.lalr_table  ;
+	ostr << fr % "Groups " 			 % e.group_table ;
+
+	ostr << "\n";
+	return ostr;
 }
 
 }
