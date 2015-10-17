@@ -15,7 +15,7 @@ struct dfa_state
 		std::vector<char32_t> char_set;
 		std::vector<std::pair<char32_t, char32_t>> char_ranges;
 		int  target;
-		bool inverted;
+		bool inverted = false; //that means, that every char except for the ones in the list can be used.
 	};
 
 	bool accept_state;
@@ -23,7 +23,6 @@ struct dfa_state
 	std::vector<edge> edges;
 
 
-	std::string write_doxy(std::ostream& ostr) const;
 
 };
 

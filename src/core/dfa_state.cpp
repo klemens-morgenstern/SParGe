@@ -10,10 +10,7 @@
 
 namespace sparge
 {
-std::string write_doxy(std::ostream& ostr) const
-{
 
-}
 
 }
 

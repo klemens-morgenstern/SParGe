@@ -5,7 +5,7 @@
 #include <sparge/core/dfa_state.hpp>
 #include <sparge/core/lalr_state.hpp>
 #include <sparge/core/symbol.hpp>
-#include <sparge/core/dfa_group.hpp>
+#include <sparge/core/token_group.hpp>
 #include <map>
 
 namespace sparge
@@ -21,13 +21,16 @@ struct parser
 	std::u32string generated_by		;
 	std::u32string generated_date 	;
 
-	std::map<int, dfa_state>  dfa_states;
-	std::map<int, lalr_state> lalr_states;
-	std::map<int, dfa_group>  dfa_groups;
-	std::map<int, symbol>	  symbols;
+	std::map<int, dfa_state>   dfa_states;
+	std::map<int, lalr_state>  lalr_states;
+	std::map<int, symbol>	   symbols;
+	std::map<int, token_group> token_groups;
 
 	int dfa;
 	int lalr;
+
+
+	void plot_dfa(std::ostream& ostr) const;
 
 };
 

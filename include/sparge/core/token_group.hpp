@@ -14,20 +14,20 @@
 namespace sparge
 {
 
-struct dfa_group
+struct token_group
 {
 
 	enum
 	{
-		Token 	 , ///<	The group will advance a token at a time.
-		Character, ///<	The group will advance by just one character at a time.
+		token 	 , ///<	The group will advance a token at a time.
+		character, ///<	The group will advance by just one character at a time.
 	} advange_mode;
 
 
 	enum
 	{
-		Open , ///<	The ending symbol will be left on the input queue.
-		Close, ///<	The ending symbol will be consumed.
+		open ,  ///<	The ending symbol will be left on the input queue.
+		closed, ///<	The ending symbol will be consumed.
 	} ending_mode;
 
 	std::u32string name;
@@ -35,7 +35,7 @@ struct dfa_group
 	int start;
 	int end;
 
-	std::vector<dfa_group*> group_index;
+	std::vector<token_group*> group_index;
 
 };
 

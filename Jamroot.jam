@@ -18,7 +18,7 @@ project SParGe :
 exe sparge : main.cpp 
 			[ glob gold/*.cpp ]
 			[ glob gold/reader/*.cpp ] 
-
+			[ glob core/*.cpp ]
  		;
 		
 		

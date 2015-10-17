@@ -64,5 +64,12 @@ int main(int argc, char ** argv)
 
 	auto d = sparge::gold::to_core(f);
 
+	if (vm.count("dfa-graphviz"))
+	{
+		std::ofstream of(vm["dfa-graphviz"].as<std::string>());
+
+		d.plot_dfa(of);
+	}
+
 	return 0;
 }
