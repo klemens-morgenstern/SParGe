@@ -11,6 +11,8 @@ project SParGe :
 	<toolset>gcc:<cxxflags>-std=gnu++1y
 	<linkflags>-LF:/boost/lib
 	<linkflags>-lboost_program_options-mgw-mt-1_59
+	<linkflags>-lboost_filesystem-mgw-mt-1_59
+	<linkflags>-lboost_system-mgw-mt-1_59
 	<linkflags>-lboost_locale-mgw-mt-1_59
 	<link>shared
 	;
@@ -19,6 +21,7 @@ exe sparge : main.cpp
 			[ glob gold/*.cpp ]
 			[ glob gold/reader/*.cpp ] 
 			[ glob core/*.cpp ]
+			[ glob generator/*.cpp ]
  		;
 		
 		

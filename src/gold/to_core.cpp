@@ -121,6 +121,8 @@ void transform_sym (sparge::parser &p, const file &f)
 
 	auto filter_name = [](std::u32string & s)
 	{
+		if (s == U"EOF")
+			return U"end_of_file";
 		if ((s[0] >= U'0') && (s[0] <= U'9'))
 			s.insert(0, 1, U'_');
 
