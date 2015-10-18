@@ -23,13 +23,13 @@ struct lalr_state
 
 	struct action
 	{
-		symbol* symbol_index;
+		int symbol_index;
 		action_type action;
-		lalr_state * target;
+		int target;
 	};
 
 
-	std::vector<action> Actions;
+	std::vector<action> actions;
 
 
 };

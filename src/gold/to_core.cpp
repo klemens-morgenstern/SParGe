@@ -206,6 +206,61 @@ void transform_grp (sparge::parser &p, const file &f)
 }
 
 
+void transform_prod (sparge::parser &p, const file &f)
+{
+
+
+
+	auto l = [&](const std::pair<std::uint16_t, production> & l)
+	{
+		sparge::production l_out;
+
+		l_out.head_index = l.second.head_index;
+		std::copy(l.second.symbols.begin(), l.second.symbols.end(),
+				std::back_inserter(l_out.symbols));
+
+		return  std::pair<int, sparge::production>{l.first,  l_out};
+	};
+
+	std::transform(f.productions.begin(), f.productions.end(),
+			std::inserter(p.productions, p.productions.end()) , l);
+}
+
+void transform_lalr (sparge::parser &p, const file &f)
+{
+
+	auto tr_action = [](const lalr_state::action_t & a)
+	{
+		sparge::lalr_state::action a_out;
+
+		a_out.symbol_index = a.symbol_index;
+		a_out.target = a.target_index;
+
+		switch (a.action)
+		{
+		case lalr_state::Shift	: a_out.action = sparge::lalr_state::shift	; break;
+		case lalr_state::Reduce : a_out.action = sparge::lalr_state::reduce; break;
+		case lalr_state::Goto	: a_out.action = sparge::lalr_state::goto_	; break;
+		case lalr_state::Accept : a_out.action = sparge::lalr_state::accept; break;
+		}
+		return a_out;
+	};
+
+
+	auto l = [&](const std::pair<std::uint16_t, lalr_state> & l)
+	{
+		sparge::lalr_state l_out;
+
+		std::transform(l.second.actions.begin(), l.second.actions.end(),
+				std::back_inserter(l_out.actions),	tr_action);
+
+		return  std::pair<int, sparge::lalr_state>{l.first,  l_out};
+	};
+
+	std::transform(f.lalr_states.begin(), f.lalr_states.end(),
+			std::inserter(p.lalr_states, p.lalr_states.end()) , l);
+}
+
 sparge::parser to_core(const file & f)
 {
 	sparge::parser p;
@@ -225,6 +280,10 @@ sparge::parser to_core(const file & f)
 	transform_sym(p, f);
 	transform_dfa(p, f);
 	transform_grp(p, f);
+
+
+	transform_prod(p, f);
+	transform_lalr(p, f);
 
 	return p;
 
