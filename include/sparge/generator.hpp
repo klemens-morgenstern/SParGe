@@ -17,10 +17,20 @@ namespace sparge
 
 struct generator
 {
-	parser data;
-	std::string name_space;
+private:
+	std::string include_guard;
+    std::string ns_in;
+    std::string ns_out;
+    boost::filesystem::path path;
+public:
 
-	void write_symbols(const boost::filesystem::path & p);
+	parser data;
+
+	void write_symbols() const ;
+
+	void set_name_space(const std::string &name_space);
+	void set_path(const boost::filesystem::path & path);
+
 
 };
 

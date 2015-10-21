@@ -13,7 +13,7 @@
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <iterator>
-
+#include <iostream>
 namespace sparge
 {
 namespace gold
@@ -121,12 +121,17 @@ void transform_sym (sparge::parser &p, const file &f)
 
 	auto filter_name = [](std::u32string & s)
 	{
+
 		if (s == U"EOF")
-			return U"end_of_file";
+		{
+			s = U"end_of_file";
+			return;
+		}
+
 		if ((s[0] >= U'0') && (s[0] <= U'9'))
 			s.insert(0, 1, U'_');
 
-		for (auto i = 0; i != s.size(); i++)
+		for (auto i = 0u; i != s.size(); i++)
 		{
 			char32_t c = s[i];
 			if (c == U' ')
@@ -140,7 +145,7 @@ void transform_sym (sparge::parser &p, const file &f)
 				&&  (c != U'_'))
 			{
 				s.erase(i);
-				auto t = boost::lexical_cast<std::u32string>(c);
+				auto t = boost::lexical_cast<std::u32string>(static_cast<int>(c));
 				s.insert(i, U"u" + t);
 				i += t.size();
 			}
