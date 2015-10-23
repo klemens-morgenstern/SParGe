@@ -16,7 +16,7 @@ namespace sparge
 struct char_set
 {
 	std::vector<char32_t> char_set;
-	std::vector<std::pair<char32_t, char32_t>> char_ranges;
+	//std::vector<std::pair<char32_t, char32_t>> char_ranges;
 };
 
 }

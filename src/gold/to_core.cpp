@@ -29,31 +29,48 @@ void transform_cst (sparge::parser &p, const file &f)
 					reinterpret_cast<const char16_t *>(&*cs.second.characters.begin()),
 					reinterpret_cast<const char16_t *>(&*cs.second.characters.end()));
 
+
+
+
 			sparge::char_set ret;
+			ret.char_set.assign(st.begin(), st.end());
+
+
 
 			auto ch_t = [](const character_set_table::char_range & c)
 			{
-
-				std::pair<char32_t, char32_t> ret =
-				{
+				char32_t begin =
 					utf_to_utf<char32_t, char16_t>(
 						reinterpret_cast<const char16_t *>(&c.begin),
-						reinterpret_cast<const char16_t *>(&c.begin+1))[0],
+						reinterpret_cast<const char16_t *>(&c.begin+1))[0];
+				char32_t end =
 					utf_to_utf<char32_t, char16_t>(
 						reinterpret_cast<const char16_t *>(&c.end),
-						reinterpret_cast<const char16_t *>(&c.end+1))[0]
-				};
-				return ret;
+						reinterpret_cast<const char16_t *>(&c.end+1))[0];
+
+				std::vector<char32_t> vec;
+				vec.reserve(end-begin+1);
+
+				for (char32_t itr = begin; itr <= end; itr++)
+					vec.push_back(itr);
+
+
+				return vec;
 			};
 
-			ret.char_ranges.resize(cs.second.char_ranges.size());
-			std::transform(	 cs.second.char_ranges.begin(),  cs.second.char_ranges.end(),
-							ret.char_ranges.begin(), //ret.char_ranges.end(),
-							ch_t);
+			for (auto & cr : cs.second.char_ranges)
+			{
+				auto s = ch_t(cr);
+				ret.char_set.insert(ret.char_set.end(),
+						s.begin(), s.end());
+			}
 
-			ret.char_set.assign(st.begin(), st.end());
 			return std::pair<int, sparge::char_set>{cs.first, ret};
 		};
+
+	std::transform(f.character_set_tables.begin(), f.character_set_tables.end(),
+				std::inserter(p.char_sets, p.char_sets.end()), dfa_edge_step);
+
 }
 
 void transform_dfa (sparge::parser &p, const file &f)

@@ -42,12 +42,12 @@ void parser::plot_dfa(std::ostream& ostr) const
 					&*c.char_set.begin(),
 					&*c.char_set.end(), "utf-8");
 
-			for (auto & x : c.char_ranges)
+		/*	for (auto & x : c.char_ranges)
 			{
 				label += boost::locale::conv::from_utf(&x.first,  &x.first+1, "utf-8")
 						+ "-" +
 						boost::locale::conv::from_utf(&x.second, &x.second+1, "utf-8");
-			}
+			}*/
 
 			label += "]";
 
