@@ -86,6 +86,7 @@ int main(int argc, char ** argv)
 
 	g.write_symbols();
 	g.write_tokenizer();
+	g.write_char_set();
 
 	return 0;
 }

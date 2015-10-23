@@ -30,12 +30,8 @@ void transform_cst (sparge::parser &p, const file &f)
 					reinterpret_cast<const char16_t *>(&*cs.second.characters.end()));
 
 
-
-
 			sparge::char_set ret;
 			ret.char_set.assign(st.begin(), st.end());
-
-
 
 			auto ch_t = [](const character_set_table::char_range & c)
 			{
@@ -53,6 +49,8 @@ void transform_cst (sparge::parser &p, const file &f)
 
 				for (char32_t itr = begin; itr <= end; itr++)
 					vec.push_back(itr);
+
+
 
 
 				return vec;
