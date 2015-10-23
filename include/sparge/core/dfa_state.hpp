@@ -12,10 +12,8 @@ struct dfa_state
 {
 	struct edge
 	{
-		std::vector<char32_t> char_set;
-		std::vector<std::pair<char32_t, char32_t>> char_ranges;
-		int  target;
-		bool inverted = false; //that means, that every char except for the ones in the list can be used.
+		int char_set_idx;
+		int target;
 	};
 
 	bool accept_state;

@@ -7,6 +7,7 @@
 #include <sparge/core/symbol.hpp>
 #include <sparge/core/token_group.hpp>
 #include <sparge/core/production.hpp>
+#include <sparge/core/char_set.hpp>
 #include <map>
 
 namespace sparge
@@ -24,6 +25,7 @@ struct parser
 
 	std::map<int, dfa_state>   dfa_states;
 	std::map<int, lalr_state>  lalr_states;
+	std::map<int, char_set>    char_sets;
 	std::map<int, symbol>	   symbols;
 	std::map<int, token_group> token_groups;
 	std::map<int, production>  productions;

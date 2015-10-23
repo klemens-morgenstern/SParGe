@@ -19,6 +19,7 @@
 #include <boost/program_options.hpp>
 #include <sparge/gold/file.hpp>
 #include <sparge/gold/to_core.hpp>
+#include <sparge/generator.hpp>
 
 namespace po = boost::program_options;
 
@@ -40,7 +41,7 @@ int main(int argc, char ** argv)
 		("print-input-data", "Print the input data, depending on the format")
 		("dfa-graphviz",  po::value<std::string>(), "produce a graphviz image for the dfa state machine")
 		("lalr-graphviz", po::value<std::string>(), "produce a graphviz image for the lalr state machine")
-	;
+		;
 
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -51,7 +52,9 @@ int main(int argc, char ** argv)
 	    std::cout << desc << "\n";
 	    return 1;
 	}
-	else if (vm.count("input") == 0)
+
+
+	if (vm.count("input") == 0)
 	{
 		std::cerr << "No input file defined";
 		return 1;
@@ -70,6 +73,19 @@ int main(int argc, char ** argv)
 
 		d.plot_dfa(of);
 	}
+
+	sparge::generator g;
+	g.data = sparge::gold::to_core(f);
+
+	if (vm.count("output"))
+		g.set_path(vm["output"].as<std::string>());
+
+	if (vm.count("namespace"))
+		g.set_name_space(vm["namespace"].as<std::string>());
+
+
+	g.write_symbols();
+	g.write_tokenizer();
 
 	return 0;
 }

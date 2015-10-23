@@ -19,23 +19,21 @@ namespace sparge
 namespace gold
 {
 
-
-void transform_dfa (sparge::parser &p, const file &f)
+void transform_cst (sparge::parser &p, const file &f)
 {
 	using boost::locale::conv::utf_to_utf;
 
-
-	auto dfa_edge_step = [&](const character_set_table & cs, std::uint16_t target)
+	auto dfa_edge_step = [&](const std::pair<std::uint16_t, character_set_table> & cs)
 		{
 			auto st = utf_to_utf<char32_t, char16_t>(
-					reinterpret_cast<const char16_t *>(&*cs.characters.begin()),
-					reinterpret_cast<const char16_t *>(&*cs.characters.end()));
+					reinterpret_cast<const char16_t *>(&*cs.second.characters.begin()),
+					reinterpret_cast<const char16_t *>(&*cs.second.characters.end()));
 
-			sparge::dfa_state::edge ret;
-			ret.target = target;
+			sparge::char_set ret;
 
 			auto ch_t = [](const character_set_table::char_range & c)
 			{
+
 				std::pair<char32_t, char32_t> ret =
 				{
 					utf_to_utf<char32_t, char16_t>(
@@ -45,21 +43,26 @@ void transform_dfa (sparge::parser &p, const file &f)
 						reinterpret_cast<const char16_t *>(&c.end),
 						reinterpret_cast<const char16_t *>(&c.end+1))[0]
 				};
-			return ret;
+				return ret;
 			};
 
-			ret.char_ranges.resize(cs.char_ranges.size());
-			std::transform(	 cs.char_ranges.begin(),  cs.char_ranges.end(),
+			ret.char_ranges.resize(cs.second.char_ranges.size());
+			std::transform(	 cs.second.char_ranges.begin(),  cs.second.char_ranges.end(),
 							ret.char_ranges.begin(), //ret.char_ranges.end(),
 							ch_t);
 
 			ret.char_set.assign(st.begin(), st.end());
-			return ret;
+			return std::pair<int, sparge::char_set>{cs.first, ret};
 		};
+}
+
+void transform_dfa (sparge::parser &p, const file &f)
+{
+	using boost::locale::conv::utf_to_utf;
 
 	auto dfa_edge_c = [&](const dfa_state::edge & e)
 		{
-			return  dfa_edge_step(f.character_set_tables.at(e.char_set_index), e.target_index);
+			return  sparge::dfa_state::edge{e.char_set_index, e.target_index};
 		};
 
 
@@ -287,7 +290,7 @@ sparge::parser to_core(const file & f)
 	transform_sym(p, f);
 	transform_dfa(p, f);
 	transform_grp(p, f);
-
+	transform_cst(p, f);
 
 	transform_prod(p, f);
 	transform_lalr(p, f);

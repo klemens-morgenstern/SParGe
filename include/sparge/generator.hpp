@@ -17,7 +17,6 @@ namespace sparge
 
 struct generator
 {
-private:
 	std::string include_guard;
     std::string ns_in;
     std::string ns_out;
@@ -26,7 +25,9 @@ public:
 
 	parser data;
 
-	void write_symbols() const ;
+	void write_symbols()   const;
+	void write_tokenizer() const;
+	void write_char_set()  const;
 
 	void set_name_space(const std::string &name_space);
 	void set_path(const boost::filesystem::path & path);

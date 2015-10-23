@@ -11,9 +11,12 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <iostream>
 
 namespace sparge
 {
+
+
 
 
 void generator::set_name_space(const std::string &name_space)
