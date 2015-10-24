@@ -41,7 +41,8 @@ void generator::write_groups() const
     "{\n"
     "\twhile (itr != end)\n"
     "\t{\n"
-    "\t\tauto tk = DStart(itr, end);\n"
+    "\tauto curr = itr;"
+    "\t\tauto tk = DStart(curr, end);\n"
     "\t\tif (tk.symbol() == symbol::%2%)\n"
     "\t\t{"
     "\t\t%3%\n"
@@ -78,6 +79,35 @@ void generator::write_groups() const
 				;
     }
 
+
+    //ok, now i have the group definition, now I need the executor.
+
+    boost::format f2(
+    		"template<typename Iterator, encoding Encoding>\n"
+    	    "finding<Iterator, Encoding> GStart(const finding<Iterator, Encoding>& f,\n"
+    	    "								 Iterator & itr, const Iterator &end)\n"
+    		"{\n"
+    		"\tswitch(f.symbol())\n"
+    		"\t{\n"
+    		"%1%"
+    		"\tdefault: return finding<Iterator, Encoding>(symbol_not_found,    symbol_type::error, itr);\n"
+    		"\t}\n"
+    		"}\n");
+
+    boost::format f3("\tcase symbol::%1%: return G%2%(itr, end);\n");
+
+    std::stringstream g_start;
+
+    for (auto & g : data.token_groups)
+    {
+    	const auto &start = data.symbols.at(g.second.start);
+
+
+    	g_start << f3 % boost::locale::conv::from_utf(start.name, "utf8") % g.first;
+
+    }
+
+    ofs << f2 % g_start.str();
     ofs << ns_out;
     ofs << "\n\n#endif\n";
 }
