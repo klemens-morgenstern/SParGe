@@ -25,9 +25,10 @@ public:
 
 	parser data;
 
-	void write_symbols()   const;
-	void write_tokenizer() const;
-	void write_char_set()  const;
+	void write_symbols()    const;
+	void write_dfa_states() const;
+	void write_char_set()   const;
+
 
 	void set_name_space(const std::string &name_space);
 	void set_path(const boost::filesystem::path & path);

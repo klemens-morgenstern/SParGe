@@ -23,6 +23,24 @@ struct symbol
 
 	std::u32string name;
 	type_t type;
+
+	std::string type_str() const
+	{
+		switch (type)
+		{
+		case nonterminal: return "nonterminal";
+		case terminal 	: return "terminal";
+		case noise 		: return "noise";
+		case end_of_file: return "end_of_file";
+		case group_start: return "group_start";
+		case group_end 	: return "group_end";
+		case decrement 	: return "decrement";
+		case error		: return "error";
+		default:
+			return "";
+		}
+	}
+
 };
 
 }

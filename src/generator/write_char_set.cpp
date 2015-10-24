@@ -54,12 +54,10 @@ void generator::write_char_set() const
 {
 	std::string cs {
 		"template<int Index, encoding Encoding>\n"
-		"struct char_set {};\n"
+		"struct {} char_set;\n"
 	};
 
-	auto cs_f   = boost::format("template<> struct char_set<%1%, encoding::%2%>\n{\n%3%\n};\n\n");
-	//callset entry format
-	auto cs_e_f = boost::format("\tconstexpr static %1% C%2%{%3%};\n");
+
 
 	auto enum_f = boost::format("\t%1%,\n");
 
@@ -70,6 +68,7 @@ void generator::write_char_set() const
     boost::format include_f{ "#ifndef %1%\n#define %1%\n\n\n"};
     ofs << include_f % (include_guard + "CHAR_SETS_H_");
 
+    ofs << "\n#include <array>\n\n";
    // ofs << "#include <" << path.string() << "/symbols.hpp" << ">\n\n";
     ofs << ns_in;
 
@@ -84,6 +83,10 @@ void generator::write_char_set() const
     }
     ofs << cs << "\n";
 
+    auto cs_f   = boost::format(
+    			"template<> constexpr static"
+    			"\tstd::array<%1%, %2%> char_set<%3%, encoding::%4%> "
+    			"\t{ %5% };\n");
 
     //now the format char sets.
     for (const std::pair<const int, char_set> & cs : data.char_sets)
@@ -95,12 +98,30 @@ void generator::write_char_set() const
 					&*cs.second.char_set.end(), e);
 
     		std::stringstream ss;
-        	int i = 0;
     		for (auto & c : cs_conv)
-    			ss << cs_e_f % "char" % i++ % static_cast<int>(c);
+    			ss << static_cast<int>(c) << ", ";
 
-    		ofs << cs_f % cs.first % e % ss.str();
+    		ofs << cs_f % "char" % cs_conv.size() % cs.first % e % ss.str();
     	}
+
+    	auto utf16 = boost::locale::conv::utf_to_utf<char16_t, char32_t>(
+								&*cs.second.char_set.begin(),
+								&*cs.second.char_set.end());
+
+    	std::stringstream s16;
+    	for (auto & c : utf16)
+    		s16 << static_cast<int>(c) << ", ";
+
+    	ofs << cs_f % "char16_t" % utf16.size() % cs.first % "utf16" % s16.str();
+
+    	std::stringstream s32;
+    	for (auto & c : cs.second.char_set)
+    		s32 << static_cast<int>(c) << ", ";
+
+    	ofs << cs_f % "char32_t" % cs.second.char_set.size() % cs.first % "utf32" % s32.str();
+
+
+
     }
 
     ofs << ns_out;
