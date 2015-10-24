@@ -20,6 +20,7 @@ struct generator
 	std::string include_guard;
     std::string ns_in;
     std::string ns_out;
+    std::string name_space;
     boost::filesystem::path path;
 public:
 
@@ -28,6 +29,7 @@ public:
 	void write_symbols()    const;
 	void write_dfa_states() const;
 	void write_char_set()   const;
+	void write_groups()   	const;
 
 
 	void set_name_space(const std::string &name_space);

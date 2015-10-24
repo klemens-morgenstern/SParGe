@@ -21,9 +21,6 @@
 namespace sparge
 {
 
-
-
-
 const static std::string sym_type =
 		"enum class symbol_type\n"
 		"{\n"
@@ -37,9 +34,9 @@ const static std::string sym_type =
 		"\tnonterminal,\n"
 		"};\n\n";
 
-const static std::string sym_type_tpl =
-		"template<symbol>\n"
-		"symbol_type symbol_type_v = symbol_type::undefined;\n\n";
+//const static std::string sym_type_tpl =
+//		"template<symbol>\n"
+//		"symbol_type symbol_type_v = symbol_type::undefined;\n\n";
 
 void generator::write_symbols() const
 {
@@ -61,10 +58,16 @@ void generator::write_symbols() const
     };
 
     boost::format sym_type_v
-    	{"template<> symbol_type symbol_type_v<symbol::%1%> \t= symbol_type::%2%;\n"}
+    	{"\tcase symbol::%1%: return symbol_type::%2%;\n"}
     ;
 
     boost::format f( "\t%1% = %2%,\n");
+
+    type_vars <<
+    		"constexpr symbol_type get_type(symbol sym)\n"
+    		"{\n"
+    		"\tswitch(sym)\n"
+    		"\t{\n";
 
     for (auto & s : data.symbols)
     {
@@ -72,6 +75,10 @@ void generator::write_symbols() const
     	enum_vals << f % nm % s.first;
 		type_vars << sym_type_v % nm % s.second.type_str();
     }
+
+    type_vars <<
+        	"\tdefault: return symbol_not_found;\n"
+    		"\t}\n};\n\n";
 
 
     std::ofstream ofs(out.string());
@@ -81,7 +88,6 @@ void generator::write_symbols() const
     ofs << ns_in;
 
     ofs << sym_type;
-    ofs << sym_type_tpl;
     ofs << header_f % enum_vals.str() ;
     ofs << type_vars.rdbuf() ;
 

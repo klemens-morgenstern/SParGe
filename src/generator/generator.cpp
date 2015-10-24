@@ -21,6 +21,7 @@ namespace sparge
 
 void generator::set_name_space(const std::string &name_space)
 {
+	this->name_space = name_space;
 	std::vector< std::string > ns;
 
     boost::iter_split(ns, name_space, boost::algorithm::first_finder("::"));

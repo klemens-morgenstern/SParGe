@@ -87,6 +87,7 @@ int main(int argc, char ** argv)
 	g.write_symbols();
 	g.write_dfa_states();
 	g.write_char_set();
+	g.write_groups();
 
 	return 0;
 }

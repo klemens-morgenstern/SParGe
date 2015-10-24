@@ -16,7 +16,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <iostream>
+
 
 namespace sparge
 {
@@ -24,22 +24,20 @@ namespace sparge
 const static std::string token_decl =
 		"\n"
 		"template<typename Iterator, encoding enc>\n"
-		"class token\n"
+		"class finding\n"
 		"{\n"
 		"\tsymbol _symbol;\n"
 		"\tsymbol_type _symbol_type;\n"
-		"\tIterator _begin;\n"
-		"\tIterator _end;\n"
+		"\tIterator _pos;\n"
 		"public:\n"
-		"\tconstexpr token() : _symbol(), _symbol_type(symbol_type::undefined) {}"
-		"\tconstexpr token(symbol _symbol, symbol_type _symbol_type, Iterator _begin, Iterator _end)\n"
-		"\t\t: _symbol(_symbol), _symbol_type(_symbol_type), _begin(_begin), _end(_end) {};\n"
+		"\tconstexpr finding() : _symbol(), _symbol_type(symbol_type::undefined) {}"
+		"\tconstexpr finding(symbol _symbol, symbol_type _symbol_type, Iterator _pos)\n"
+		"\t\t: _symbol(_symbol), _symbol_type(_symbol_type), _pos(_pos) {};\n"
 		"\n"
 		"\tusing iterator = Iterator;\n"
 		"\tsymbol 		symbol() 	  const {return _symbol; }\n"
 		"\tsymbol_type symbol_type() const {return _symbol_type; }\n"
-		"\tIterator begin() const {return _begin;}\n"
-		"\tIterator end()   const {return _end;}\n"
+		"\tIterator pos() const {return _pos;}\n"
 		"};\n\n"
 ;
 
@@ -76,7 +74,7 @@ std::string make_state(const parser &ps , int idx, const dfa_state& st)
 	//param 1 is the state index, 2 the eof handling, 3 the edges, 4 the default case.
 	boost::format f(
 			"template<encoding Encoding, typename Iterator>\n"
-			"constexpr token<Encoding,Iterator> D%1%(Iterator &itr, const Iterator& end)\n"
+			"constexpr finding<Encoding,Iterator> D%1%(Iterator &itr, const Iterator& end)\n"
 			"{\n"
 			"\tif (itr == end)\n"
 			"\t\t%2%\n"
@@ -97,7 +95,7 @@ std::string make_state(const parser &ps , int idx, const dfa_state& st)
 
 	if (st.accept_state)
 	{
-		boost::format f2("return token<Encoding, Iterator>(symbol::%1%, symbol_type::%2%, itr, end);");
+		boost::format f2("return finding<Encoding, Iterator>(symbol::%1%, symbol_type::%2%, itr);");
 
 		const symbol &s = ps.symbols.at(st.accept_index);
 		auto formatted = f2 % boost::locale::conv::from_utf(s.name, "utf-8") % s.type_str();
@@ -106,8 +104,8 @@ std::string make_state(const parser &ps , int idx, const dfa_state& st)
 	}
 	else
 	{
-		a2 = "return token<Encoding, Iterator>(symbol::end_of_file, symbol_type::error, itr, end);";
-		a4 = "return token<Encoding, Iterator>(symbol_not_found, symbol_type::error, itr, end);";
+		a2 = "return finding<Encoding, Iterator>(symbol::end_of_file, symbol_type::error, itr);";
+		a4 = "return finding<Encoding, Iterator>(symbol_not_found,    symbol_type::error, itr);";
 	}
 
 	return (f % a1 % a2 % a3 % a4).str();
@@ -121,7 +119,7 @@ void generator::write_dfa_states() const
     std::ofstream ofs(out.string());
 
     boost::format include_f{ "#ifndef %1%\n#define %1%\n\n\n"};
-    ofs << include_f % (include_guard + "TOKENIZER_H_");
+    ofs << include_f % (include_guard + "DFA_STATES_H_");
 
     ofs << "#include <" << path.string() << "/symbols.hpp" << ">\n";
     ofs << "#include <" << path.string() << "/char_sets.hpp" << ">\n\n";
@@ -139,7 +137,7 @@ void generator::write_dfa_states() const
 
     //starting state
     boost::format f_start("template<encoding Encoding, typename Iterator>\n"
-			"constexpr token<Encoding,Iterator> DStart(Iterator &itr, const Iterator& end)\n"
+			"finding<Encoding,Iterator> DStart(Iterator &itr, const Iterator& end)\n"
 			"{\n"
 			"\treturn D%1%(itr, end);\n"
 			"}\n");
