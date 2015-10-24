@@ -14,7 +14,7 @@ namespace sparge
 {
 namespace gold
 {
-using integer 	= std::uint16_t;
+using integer 	= char16_t;//std::uint16_t;
 template<typename T>
 using range		= std::vector<T>;
 using string  	= std::u16string;

@@ -27,7 +27,7 @@ struct visi : boost::static_visitor<std::string>
 		return ws.str();
 
 	}
-	std::string operator()(uint16_t val)
+	std::string operator()(char16_t val)
 	{
 		ostringstream ws;
 		ws << "int: " << val;
@@ -79,7 +79,7 @@ entry entry::read_entry(std::istream& str)
 	case 'I': //Integer
 	{
 		str.read(&c, 1);
-		std::uint16_t val;
+		char16_t val;
 		str.read(reinterpret_cast<char*>(&val), 2);
 		return entry(val);
 	}
